@@ -2,6 +2,8 @@ package com.leslie.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.member.entity.User;
+import com.leslie.member.vo.LoginWithCodeVo;
+import com.leslie.member.vo.Result;
 
 /**
  * @author 20110
@@ -10,4 +12,19 @@ import com.leslie.member.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    /**
+     * 发送验证码
+     *
+     * @param phone
+     * @return 返回成功或失败
+     */
+    Result sendCode(String phone);
+
+    /**
+     * 基于验证码登录
+     *
+     * @param loginForm 手机号、验证码
+     * @return 返回token
+     */
+    Result loginWithCode(LoginWithCodeVo loginForm);
 }
