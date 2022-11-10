@@ -1,7 +1,7 @@
 package com.leslie.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.leslie.member.entity.User;
+import com.leslie.member.pojo.User;
 import com.leslie.member.vo.LoginWithCodeVo;
 import com.leslie.member.vo.Result;
 

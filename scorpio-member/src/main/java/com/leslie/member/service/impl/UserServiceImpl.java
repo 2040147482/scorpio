@@ -6,7 +6,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leslie.member.dto.UserDTO;
-import com.leslie.member.entity.User;
+import com.leslie.member.pojo.User;
 import com.leslie.member.mapper.UserMapper;
 import com.leslie.member.service.UserService;
 import com.leslie.member.utils.RegexUtils;

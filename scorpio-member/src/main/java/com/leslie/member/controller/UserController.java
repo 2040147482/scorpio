@@ -1,4 +1,4 @@
-package com.leslie.member.controller.portal;
+package com.leslie.member.controller;
 
 import com.leslie.member.vo.LoginWithCodeVo;
 import com.leslie.member.vo.Result;

@@ -1,4 +1,4 @@
-package com.leslie.member.entity;
+package com.leslie.member.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

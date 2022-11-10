@@ -1,7 +1,7 @@
 package com.leslie.member.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.leslie.member.entity.UserInfo;
+import com.leslie.member.pojo.UserInfo;
 import com.leslie.member.mapper.UserInfoMapper;
 import com.leslie.member.service.UserInfoService;
 import org.springframework.stereotype.Service;

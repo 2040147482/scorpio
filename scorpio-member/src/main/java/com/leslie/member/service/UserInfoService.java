@@ -1,7 +1,7 @@
 package com.leslie.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.leslie.member.entity.UserInfo;
+import com.leslie.member.pojo.UserInfo;
 
 /**
  * @author 20110
