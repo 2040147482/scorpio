@@ -3,7 +3,8 @@ package com.leslie.member.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.member.pojo.User;
 import com.leslie.member.vo.LoginWithCodeVo;
-import com.leslie.member.vo.Result;
+import com.leslie.utils.Result;
+
 
 /**
  * @author 20110
@@ -15,7 +16,7 @@ public interface UserService extends IService<User> {
     /**
      * 发送验证码
      *
-     * @param phone
+     * @param phone 手机号
      * @return 返回成功或失败
      */
     Result sendCode(String phone);

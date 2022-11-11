@@ -11,7 +11,7 @@ import com.leslie.member.mapper.UserMapper;
 import com.leslie.member.service.UserService;
 import com.leslie.member.utils.RegexUtils;
 import com.leslie.member.vo.LoginWithCodeVo;
-import com.leslie.member.vo.Result;
+import com.leslie.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,6 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.leslie.member.constants.RedisConstants.*;
-import static com.leslie.member.constants.RedisConstants.LOGIN_USER_TTL;
 import static com.leslie.member.constants.SystemConstants.USER_NICK_NAME_PREFIX;
 
 

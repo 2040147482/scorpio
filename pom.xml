@@ -10,6 +10,7 @@
     <modules>
         <module>scorpio-member</module>
         <module>scorpio-product</module>
+        <module>scorpio-commons-feign</module>
     </modules>
     <packaging>pom</packaging>
 
