@@ -11,6 +11,7 @@
         <module>scorpio-member</module>
         <module>scorpio-product</module>
         <module>scorpio-commons-feign</module>
+        <module>scorpio-gateway</module>
     </modules>
     <packaging>pom</packaging>
 

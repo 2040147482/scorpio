@@ -3,3 +3,6 @@ server:
 spring:
   application:
     name: product-service
+  cloud:
+    nacos:
+      server-addr: localhost:8848

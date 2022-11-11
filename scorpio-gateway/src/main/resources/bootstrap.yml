@@ -1,0 +1,10 @@
+server:
+  port: 12022 # 前端默认访问端口号为10000
+  servlet:
+    context-path: / # 前端默认访问的根路径
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    nacos:
+      server-addr: localhost:8848 # nacos地址

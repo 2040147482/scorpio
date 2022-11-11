@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes: # 网关路由配置
+        - id: member-service
+          uri: lb://member-service
+          predicates:
+            - Path=/user/**
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**
