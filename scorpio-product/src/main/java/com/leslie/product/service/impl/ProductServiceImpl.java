@@ -52,4 +52,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         List<Product> productList = productMapper.selectList(null);
         return Result.ok(productList);
     }
+
+    @Override
+    public Result detail(Long productId) {
+        Product product = productMapper.selectById(productId);
+        return Result.ok(product);
+    }
 }

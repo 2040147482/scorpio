@@ -26,4 +26,11 @@ public interface ProductService extends IService<Product> {
      * @return Result
      */
     Result all();
+
+    /**
+     * 查询商品详情
+     * @param productId 商品id
+     * @return Result
+     */
+    Result detail(Long productId);
 }

@@ -21,7 +21,7 @@ public class ProductController {
     private CategoryService categoryService;
 
     @GetMapping("/all")
-    public Result all(){
+    public Result all() {
         return productService.all();
     }
 
@@ -31,10 +31,18 @@ public class ProductController {
     }
 
     @PostMapping("/promo")
-    public Result promo(@RequestParam("categoryName") String categoryName){
+    public Result promo(@RequestParam("categoryName") String categoryName) {
         if (categoryName.isEmpty()) {
             return Result.fail("空参无法查询");
         }
         return productService.promo(categoryName);
+    }
+
+    @PostMapping("/detail/{productId}")
+    public Result detail(@PathVariable("productId") Long productId) {
+        if (productId == null) {
+            return Result.fail("请请求正确的路径");
+        }
+        return productService.detail(productId);
     }
 }
