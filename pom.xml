@@ -12,6 +12,7 @@
         <module>scorpio-product</module>
         <module>scorpio-commons-feign</module>
         <module>scorpio-gateway</module>
+        <module>scorpio-search</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -30,6 +31,7 @@
         <mysql.version>8.0.26</mysql.version>
         <mybatis-plus.vesion>3.5.1</mybatis-plus.vesion>
         <druid.version>1.2.11</druid.version>
+        <elasticsearch.version>7.8.0</elasticsearch.version>
     </properties>
 
     <!--配置dependencyManagement锁定依赖的版本-->
