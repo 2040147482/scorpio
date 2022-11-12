@@ -1,6 +1,6 @@
 package com.leslie.product.service;
 
-import com.leslie.product.pojo.Product;
+import com.leslie.pojo.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.utils.Result;
 
