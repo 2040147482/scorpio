@@ -3,10 +3,7 @@ package com.leslie.collect.controller;
 import com.leslie.collect.service.CollectService;
 import com.leslie.collect.vo.CollectParams;
 import com.leslie.utils.Result;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -21,7 +18,12 @@ public class CollectController {
     private CollectService collectService;
 
     @PostMapping("/save")
-    public Result saveProduct(@RequestBody CollectParams collectParams){
+    public Result saveProduct(@RequestBody CollectParams collectParams) {
         return collectService.saveProduct(collectParams);
+    }
+
+    @PostMapping("/show/{userId}")
+    public Result showCollect(@PathVariable("userId") Long userId) {
+        return collectService.show(userId);
     }
 }

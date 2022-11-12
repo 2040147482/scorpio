@@ -3,6 +3,7 @@ package com.leslie.product.controller;
 import com.leslie.pojo.Product;
 import com.leslie.product.service.CategoryService;
 import com.leslie.product.service.ProductService;
+import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,10 +46,16 @@ public class ProductController {
 
     /**
      * 供搜索服务调用
+     *
      * @return 全部商品
      */
     @GetMapping("/list")
-    public List<Product> list(){
+    public List<Product> list() {
         return productService.list();
+    }
+
+    @PostMapping("/ids")
+    public List<Product> ids(@RequestBody ProductIdsParam productIdsParam) {
+        return productService.ids(productIdsParam);
     }
 }

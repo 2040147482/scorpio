@@ -8,6 +8,7 @@ import com.leslie.pojo.Product;
 import com.leslie.product.service.CategoryService;
 import com.leslie.product.service.ProductService;
 import com.leslie.product.mapper.ProductMapper;
+import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +53,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
     public Result detail(Long productId) {
         Product product = productMapper.selectById(productId);
         return Result.ok(product);
+    }
+
+    @Override
+    public List<Product> ids(ProductIdsParam productIdsParam) {
+        List<Long> productIds = productIdsParam.getProductIds();
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("product_id", productIds);
+        List<Product> list = productMapper.selectList(queryWrapper);
+        return list;
     }
 }

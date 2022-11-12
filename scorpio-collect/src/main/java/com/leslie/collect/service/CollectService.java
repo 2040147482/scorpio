@@ -19,4 +19,14 @@ public interface CollectService extends IService<Collect> {
      * @return 666
      */
     Result saveProduct(CollectParams collectParams);
+
+    /**
+     * 查看收藏，
+     *      1.根据用户id查询商品id集合
+     *      2.调用商品服务，根据商品id集合查询商品数据集
+     *
+     * @param userId 用户id
+     * @return 666
+     */
+    Result show(Long userId);
 }

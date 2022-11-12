@@ -2,7 +2,10 @@ package com.leslie.product.service;
 
 import com.leslie.pojo.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
+
+import java.util.List;
 
 /**
  * @author 20110
@@ -29,4 +32,12 @@ public interface ProductService extends IService<Product> {
      * @return Result
      */
     Result detail(Long productId);
+
+    /**
+     * 供收藏服务使用,根据传入的商品id,查询商品集合!
+     *
+     * @param productIdsParam 商品id
+     * @return 商品集合数据
+     */
+    List<Product> ids(ProductIdsParam productIdsParam);
 }
