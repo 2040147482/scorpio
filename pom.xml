@@ -13,6 +13,7 @@
         <module>scorpio-commons-feign</module>
         <module>scorpio-gateway</module>
         <module>scorpio-search</module>
+        <module>scorpio-collect</module>
     </modules>
     <packaging>pom</packaging>
 
