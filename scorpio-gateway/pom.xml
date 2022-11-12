@@ -12,10 +12,6 @@
     <artifactId>scorpio-gateway</artifactId>
     <description>网关服务</description>
 
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <!--网关gateway依赖-->
