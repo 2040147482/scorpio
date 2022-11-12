@@ -1,11 +1,13 @@
 package com.leslie.product.controller;
 
+import com.leslie.pojo.Product;
 import com.leslie.product.service.CategoryService;
 import com.leslie.product.service.ProductService;
 import com.leslie.utils.Result;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author 20110
@@ -19,11 +21,6 @@ public class ProductController {
 
     @Resource
     private CategoryService categoryService;
-
-    @GetMapping("/all")
-    public Result all() {
-        return productService.all();
-    }
 
     @GetMapping("/category/all")
     public Result allCategory() {
@@ -44,5 +41,14 @@ public class ProductController {
             return Result.fail("请请求正确的路径");
         }
         return productService.detail(productId);
+    }
+
+    /**
+     * 供搜索服务调用
+     * @return 全部商品
+     */
+    @GetMapping("/list")
+    public List<Product> list(){
+        return productService.list();
     }
 }

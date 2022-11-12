@@ -47,11 +47,6 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok(productList, total);
     }
 
-    @Override
-    public Result all() {
-        List<Product> productList = productMapper.selectList(null);
-        return Result.ok(productList);
-    }
 
     @Override
     public Result detail(Long productId) {
