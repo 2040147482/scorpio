@@ -18,7 +18,7 @@ public interface CollectService extends IService<Collect> {
      * @param collectParams 用户id、商品
      * @return 666
      */
-    Result saveProduct(CollectParams collectParams);
+    Result saveCollect(CollectParams collectParams);
 
     /**
      * 查看收藏，

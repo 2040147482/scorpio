@@ -18,8 +18,8 @@ public class CollectController {
     private CollectService collectService;
 
     @PostMapping("/save")
-    public Result saveProduct(@RequestBody CollectParams collectParams) {
-        return collectService.saveProduct(collectParams);
+    public Result saveCollect(@RequestBody CollectParams collectParams) {
+        return collectService.saveCollect(collectParams);
     }
 
     @PostMapping("/show/{userId}")

@@ -32,8 +32,9 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
     @Resource
     private ProductClient productClient;
 
+    @Transactional
     @Override
-    public Result saveProduct(CollectParams collectParams) {
+    public Result saveCollect(CollectParams collectParams) {
         Collect collect = new Collect();
         collect.setUserId(collectParams.getUserId());
         collect.setProductId(collectParams.getProductId());
