@@ -29,4 +29,11 @@ public interface CollectService extends IService<Collect> {
      * @return 666
      */
     Result show(Long userId);
+
+    /**
+     * 根据用户和商品ID，删除收藏数据
+     * @param collectParams 用户id、商品
+     * @return 666
+     */
+    Result removeCollect(CollectParams collectParams);
 }

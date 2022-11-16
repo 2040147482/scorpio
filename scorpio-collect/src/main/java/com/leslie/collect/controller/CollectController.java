@@ -26,4 +26,9 @@ public class CollectController {
     public Result showCollect(@PathVariable("userId") Long userId) {
         return collectService.show(userId);
     }
+
+    @PostMapping("/remove")
+    public Result remove(@RequestBody CollectParams collectParams) {
+        return collectService.removeCollect(collectParams);
+    }
 }

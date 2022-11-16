@@ -11,6 +11,7 @@ import com.leslie.pojo.Product;
 import com.leslie.utils.Result;
 import com.leslie.vo.ProductIdsParam;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -60,5 +61,20 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
         //收藏数
         Long total = collectMapper.selectCount(queryWrapper);
         return Result.ok(products, total);
+    }
+
+    @Transactional
+    @Override
+    public Result removeCollect(CollectParams collectParams) {
+        QueryWrapper<Collect> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", collectParams.getUserId());
+        queryWrapper.eq("product_id", collectParams.getProductId());
+
+        int row = collectMapper.delete(queryWrapper);
+        if (row == 0) {
+            return Result.fail("收藏的商品删除失败！");
+        }
+
+        return Result.ok();
     }
 }
