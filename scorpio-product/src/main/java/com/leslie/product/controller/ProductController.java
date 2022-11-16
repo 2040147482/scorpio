@@ -58,4 +58,24 @@ public class ProductController {
     public List<Product> ids(@RequestBody ProductIdsParam productIdsParam) {
         return productService.ids(productIdsParam);
     }
+
+
+    /**
+     * 以下接口后台管理模块调用
+     */
+    @PostMapping("/save")
+    public Result save(@RequestBody Product product) {
+        return productService.saveProduct(product);
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody Product product) {
+        return productService.updateProduct(product);
+    }
+
+    @DeleteMapping("/remove/{id}")
+    public Result update(@PathVariable("id") Long id) {
+        return productService.removeProduct(id);
+    }
+
 }

@@ -40,4 +40,28 @@ public interface ProductService extends IService<Product> {
      * @return 商品集合数据
      */
     List<Product> ids(ProductIdsParam productIdsParam);
+
+    /**
+     * 1.保存商品数据
+     * 2.发送消息通知es更新数据
+     * @param product 商品数据
+     * @return Result
+     */
+    Result saveProduct(Product product);
+
+    /**
+     * 1.更新商品数据
+     * 2.发送消息通知es更新数据
+     * @param product 商品数据
+     * @return Result
+     */
+    Result updateProduct(Product product);
+
+    /**
+     * 1.根据id删除商品数据
+     * 2.发送消息通知es更新数据
+     * @param id 商品id
+     * @return Result
+     */
+    Result removeProduct(Long id);
 }

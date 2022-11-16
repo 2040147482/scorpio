@@ -3,6 +3,7 @@ package com.leslie.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leslie.constants.MqConstants;
 import com.leslie.product.pojo.Category;
 import com.leslie.pojo.Product;
 import com.leslie.product.service.CategoryService;
@@ -10,7 +11,10 @@ import com.leslie.product.service.ProductService;
 import com.leslie.product.mapper.ProductMapper;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,6 +24,7 @@ import java.util.List;
  * @description 针对表【tb_product(商品表)】的数据库操作Service实现
  * @createDate 2022-11-11 19:51:56
  */
+@Slf4j
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         implements ProductService {
@@ -29,6 +34,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
 
     @Resource
     private CategoryService categoryService;
+
+    @Resource
+    private RabbitTemplate rabbitTemplate;
 
     @Override
     public Result promo(String categoryName) {
@@ -62,5 +70,59 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         queryWrapper.in("product_id", productIds);
         List<Product> list = productMapper.selectList(queryWrapper);
         return list;
+    }
+
+    @Transactional
+    @Override
+    public Result saveProduct(Product product) {
+        log.info("商品信息:{}", product);
+        Long categoryId = product.getCategoryId();
+        if (categoryId == null || categoryId < 0) {
+            return Result.fail("分类id有误！");
+        }
+        //保存商品信息
+        int row = productMapper.insert(product);
+
+        if (row == 0) {
+            return Result.fail("插入失败");
+        }
+
+        //通知es更新数据
+        rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_INSERT_KEY, product);
+        return Result.ok();
+    }
+
+    @Transactional
+    @Override
+    public Result updateProduct(Product product) {
+        if (product.getProductId() == null) {
+            return Result.fail("id不能为空");
+        }
+
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("product_id", product.getProductId());
+
+        int row = productMapper.update(product, queryWrapper);
+        if (row == 0) {
+            return Result.fail("更新失败");
+        }
+
+        //通知es更新数据
+        rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_INSERT_KEY, product);
+        return Result.ok();
+    }
+
+    @Override
+    public Result removeProduct(Long id) {
+        QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("product_id", id);
+
+        int row = productMapper.delete(queryWrapper);
+        if (row == 0) {
+            return Result.fail("更新失败");
+        }
+        //通知es更新数据
+        rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_DELETE_KEY, id);
+        return Result.ok();
     }
 }
