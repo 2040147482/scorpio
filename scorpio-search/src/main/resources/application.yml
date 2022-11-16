@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: mq  # 激活mq配置
   jackson:
     default-property-inclusion: non_null # JSON处理时忽略非空字段
 ribbon:
