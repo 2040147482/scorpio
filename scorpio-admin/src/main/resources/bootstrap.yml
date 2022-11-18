@@ -1,0 +1,8 @@
+server:
+  port: 12020
+spring:
+  application:
+    name: admin-service
+  cloud:
+    nacos:
+      server-addr: localhost:8848

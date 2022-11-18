@@ -18,3 +18,7 @@ spring:
           uri: lb://collect-service
           predicates:
             - Path=/collect/**
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**
