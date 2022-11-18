@@ -1,4 +1,4 @@
-package com.leslie.member.pojo;
+package com.leslie.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -12,11 +12,9 @@ import java.util.Date;
 
 /**
  * 用户信息表
- *
- * @author 20110
  * @TableName tb_user_info
  */
-@TableName(value = "tb_user_info")
+@TableName(value ="tb_user_info")
 @Data
 public class UserInfo implements Serializable {
     /**
@@ -26,9 +24,9 @@ public class UserInfo implements Serializable {
     private Long id;
 
     /**
-     * member_user_login表的自增ID
+     * tb_user表的自增ID
      */
-    private Long loginId;
+    private Long userId;
 
     /**
      * 用户的真实姓名
@@ -36,9 +34,9 @@ public class UserInfo implements Serializable {
     private String name;
 
     /**
-     * 证件类型 1身份证，2军官证，3护照
+     * 联系电话
      */
-    private Integer identityCardType;
+    private String phoneNumber;
 
     /**
      * 邮箱
@@ -51,29 +49,14 @@ public class UserInfo implements Serializable {
     private Integer gender;
 
     /**
-     * 地址
+     * 用户余额
      */
-    private String address;
-
-    /**
-     * 会员积分
-     */
-    private Integer userPoint;
+    private BigDecimal userMoney;
 
     /**
      * 注册时间
      */
     private Date registerTime;
-
-    /**
-     * 会员级别，0~9级,0代表未开通会员
-     */
-    private Integer userLevel;
-
-    /**
-     * 用户余额
-     */
-    private BigDecimal userMoney;
 
     /**
      * 修改时间
