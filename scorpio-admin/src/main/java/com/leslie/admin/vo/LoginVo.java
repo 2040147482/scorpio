@@ -1,4 +1,4 @@
-package com.leslie.vo;
+package com.leslie.admin.vo;
 
 import lombok.Data;
 
@@ -6,9 +6,9 @@ import lombok.Data;
  * @author 20110
  */
 @Data
-public class AdminLoginParam {
+public class LoginVo {
 
-    private String account;
+    private String username;
     private String password;
 
 }

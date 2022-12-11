@@ -9,3 +9,21 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+ribbon:
+  eager-load:
+    enabled: true #开启饥饿加载提升第一次访问速度
+    clients:
+      - product-service
+      - member-service
+
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 6000
+  httpclient:
+    enabled: true  # 开启httpClient接池
+    max-connections: 200  #最大连接数量
+    max-connections-per-route: 50  #单路径最大连接数

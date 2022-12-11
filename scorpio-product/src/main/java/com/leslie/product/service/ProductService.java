@@ -42,6 +42,14 @@ public interface ProductService extends IService<Product> {
     List<Product> ids(ProductIdsParam productIdsParam);
 
     /**
+     * 分页查询商品信息
+     * @param page 当前页码
+     * @param size 条数
+     * @return
+     */
+    Result queryPage(Integer page, Integer size);
+
+    /**
      * 1.保存商品数据
      * 2.发送消息通知es更新数据
      * @param product 商品数据
@@ -64,4 +72,5 @@ public interface ProductService extends IService<Product> {
      * @return Result
      */
     Result removeProduct(Long id);
+
 }

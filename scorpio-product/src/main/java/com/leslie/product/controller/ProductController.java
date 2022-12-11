@@ -59,10 +59,15 @@ public class ProductController {
         return productService.ids(productIdsParam);
     }
 
-
     /**
      * 以下接口后台管理模块调用
      */
+    @GetMapping("/query/{page}/{size}")
+    public Result queryPage(@PathVariable("page") Integer page,
+                            @PathVariable("size") Integer size) {
+        return productService.queryPage(page, size);
+    }
+
     @PostMapping("/save")
     public Result save(@RequestBody Product product) {
         return productService.saveProduct(product);
@@ -74,7 +79,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/remove/{id}")
-    public Result update(@PathVariable("id") Long id) {
+    public Result deleteByProductId(@PathVariable("id") Long id) {
         return productService.removeProduct(id);
     }
 

@@ -72,6 +72,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return list;
     }
 
+    @Override
+    public Result queryPage(Integer page, Integer size) {
+        Page<Product> productPage = new Page<>(page, size);
+        productPage = productMapper.selectPage(productPage,null);
+        List<Product> productList = productPage.getRecords();
+        long total = productPage.getTotal();
+        return Result.ok(productList,total);
+    }
+
     @Transactional
     @Override
     public Result saveProduct(Product product) {
@@ -104,7 +113,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
 
         int row = productMapper.update(product, queryWrapper);
         if (row == 0) {
-            return Result.fail("更新失败");
+            return Result.fail("商品信息更新失败");
         }
 
         //通知es更新数据
@@ -112,6 +121,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok();
     }
 
+    @Transactional
     @Override
     public Result removeProduct(Long id) {
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
@@ -119,7 +129,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
 
         int row = productMapper.delete(queryWrapper);
         if (row == 0) {
-            return Result.fail("更新失败");
+            return Result.fail("删除商品信息失败！");
         }
         //通知es更新数据
         rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_DELETE_KEY, id);
