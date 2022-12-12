@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -36,7 +37,7 @@ public class Product implements Serializable {
     /**
      * 价格
      */
-    private Double price;
+    private BigDecimal price;
 
     /**
      * 上架状态，1：上架，0：未上架

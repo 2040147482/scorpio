@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author 20110
@@ -40,7 +41,7 @@ public class CartVo implements Serializable {
     /**
      * 商城价格
      */
-    private Double price;
+    private BigDecimal price;
 
     /**
      * 商品购买数量
