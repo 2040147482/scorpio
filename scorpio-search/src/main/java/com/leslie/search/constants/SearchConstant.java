@@ -19,11 +19,6 @@ public class SearchConstant {
             "      \"categoryId\":{\n" +
             "        \"type\": \"integer\"\n" +
             "      },\n" +
-            "      \"descript\":{\n" +
-            "        \"type\": \"text\",\n" +
-            "        \"analyzer\": \"ik_smart\",\n" +
-            "        \"copy_to\": \"all\"\n" +
-            "      },\n" +
             "      \"price\":{\n" +
             "        \"type\": \"double\",\n" +
             "        \"index\": true\n" +

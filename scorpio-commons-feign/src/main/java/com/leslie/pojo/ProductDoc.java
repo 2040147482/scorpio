@@ -14,8 +14,7 @@ public class ProductDoc {
     private Long productId;
     private String productName;
     private Long categoryId;
-    private String descript;
-    private Integer price;
+    private Double price;
     private Integer productStatus;
     private Integer productStock;
     private Integer productSales;
@@ -26,13 +25,12 @@ public class ProductDoc {
         this.productId = product.getProductId();
         this.productName = product.getProductName();
         this.categoryId = product.getCategoryId();
-        this.descript = product.getDescript();
         this.price = product.getPrice();
         this.productStatus = product.getProductStatus();
         this.productStock = product.getProductStock();
         this.productSales = product.getProductSales();
         this.imageUrl = product.getImageUrl();
-        this.all = product.getProductName() + product.getDescript();
+        this.all = product.getProductName();
     }
 
 }

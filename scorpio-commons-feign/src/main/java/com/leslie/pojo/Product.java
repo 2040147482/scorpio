@@ -34,14 +34,9 @@ public class Product implements Serializable {
     private Long categoryId;
 
     /**
-     * 商品描述
-     */
-    private String descript;
-
-    /**
      * 价格
      */
-    private Integer price;
+    private Double price;
 
     /**
      * 上架状态，1：上架，0：未上架
