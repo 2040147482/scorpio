@@ -14,8 +14,8 @@ mybatis-plus:
 ribbon:
   eager-load:
     enabled: true
-    clients:
-      - collect-service
+    clients:  # 指定饥饿加载的服务名称
+      - product-service
 feign:
   httpclient:
     enabled: true

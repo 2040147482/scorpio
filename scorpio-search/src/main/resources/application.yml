@@ -7,7 +7,7 @@ ribbon:
   eager-load:
     enabled: true #开启饥饿加载提升第一次访问速度
     clients:
-      - search-service
+      - product-service
 feign:
   httpclient:
     enabled: true  # 开启httpClient接池
