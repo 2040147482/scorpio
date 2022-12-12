@@ -26,7 +26,7 @@ public class Result {
     public static final String FAIL_CODE = "886";
 
     private String code;
-    private String errorMsg;
+    private String msg;
     private Object data;
     private Long total;
 
@@ -37,6 +37,10 @@ public class Result {
 
     public static Result ok(Object data) {
         return new Result(SUCCESS_CODE, null, data, null);
+    }
+
+    public static Result ok(String msg, Object data) {
+        return new Result(SUCCESS_CODE, msg, data, null);
     }
 
     public static Result ok(List<?> data, long total) {
