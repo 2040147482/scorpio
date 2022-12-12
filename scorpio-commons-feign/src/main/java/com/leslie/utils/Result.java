@@ -32,11 +32,11 @@ public class Result {
 
 
     public static Result ok() {
-        return new Result(SUCCESS_CODE, null, null, null);
+        return new Result(SUCCESS_CODE, "success", null, null);
     }
 
     public static Result ok(Object data) {
-        return new Result(SUCCESS_CODE, null, data, null);
+        return new Result(SUCCESS_CODE, "success", data, null);
     }
 
     public static Result ok(String msg, Object data) {
@@ -44,7 +44,7 @@ public class Result {
     }
 
     public static Result ok(List<?> data, long total) {
-        return new Result(SUCCESS_CODE, null, data, total);
+        return new Result(SUCCESS_CODE, "success", data, total);
     }
 
     public static Result fail(String errorMsg) {

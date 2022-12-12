@@ -83,4 +83,13 @@ public class ProductController {
         return productService.removeProduct(id);
     }
 
+    /**
+     * 以下为购物车服务调用的接口
+     */
+    @GetMapping("/cart/{productId}")
+    public Product cartProductDetail(@PathVariable("productId") Long productId) {
+        Result result = productService.detail(productId);
+        Product product = (Product) result.getData();
+        return product;
+    }
 }

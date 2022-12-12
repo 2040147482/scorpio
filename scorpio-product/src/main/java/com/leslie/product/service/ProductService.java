@@ -34,7 +34,7 @@ public interface ProductService extends IService<Product> {
     Result detail(Long productId);
 
     /**
-     * 供收藏服务使用,根据传入的商品id,查询商品集合!
+     * 供收藏服务、购物车服务调用，根据传入的商品id集合，查询商品集合
      *
      * @param productIdsParam 商品id
      * @return 商品集合数据
@@ -43,6 +43,7 @@ public interface ProductService extends IService<Product> {
 
     /**
      * 分页查询商品信息
+     *
      * @param page 当前页码
      * @param size 条数
      * @return
@@ -52,6 +53,7 @@ public interface ProductService extends IService<Product> {
     /**
      * 1.保存商品数据
      * 2.发送消息通知es更新数据
+     *
      * @param product 商品数据
      * @return Result
      */
@@ -60,6 +62,7 @@ public interface ProductService extends IService<Product> {
     /**
      * 1.更新商品数据
      * 2.发送消息通知es更新数据
+     *
      * @param product 商品数据
      * @return Result
      */
@@ -68,6 +71,7 @@ public interface ProductService extends IService<Product> {
     /**
      * 1.根据id删除商品数据
      * 2.发送消息通知es更新数据
+     *
      * @param id 商品id
      * @return Result
      */

@@ -15,6 +15,7 @@
         <module>scorpio-search</module>
         <module>scorpio-collect</module>
         <module>scorpio-admin</module>
+        <module>scorpio-cart</module>
     </modules>
     <packaging>pom</packaging>
 

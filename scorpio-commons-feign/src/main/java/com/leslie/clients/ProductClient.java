@@ -22,9 +22,8 @@ public interface ProductClient {
     @GetMapping("/product/list")
     List<Product> list();
 
-
     /**
-     * 供收藏服务调用
+     * 供收藏服务、购物车服务调用
      *
      * @param productIdsParam 商品id
      * @return 商品集合数据
@@ -34,6 +33,7 @@ public interface ProductClient {
 
     /**
      * 供后台管理调用 分页查询商品信息
+     *
      * @param page
      * @param size
      * @return
@@ -50,4 +50,13 @@ public interface ProductClient {
 
     @DeleteMapping("/product/remove/{id}")
     Result deleteByProductId(@PathVariable("id") Long id);
+
+    /**
+     * 以下为购物车服务调用的接口
+     *
+     * @param productId 商品id
+     * @return 单个商品信息
+     */
+    @GetMapping("/product/cart/{productId}")
+    Product cartProductDetail(@PathVariable("productId") Long productId);
 }

@@ -22,3 +22,7 @@ spring:
           uri: lb://admin-service
           predicates:
             - Path=/admin/**
+        - id: cart-service
+          uri: lb://cart-service
+          predicates:
+            - Path=/cart/**
