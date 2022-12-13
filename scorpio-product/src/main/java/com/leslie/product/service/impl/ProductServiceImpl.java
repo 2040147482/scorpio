@@ -9,6 +9,7 @@ import com.leslie.pojo.Product;
 import com.leslie.product.service.CategoryService;
 import com.leslie.product.service.ProductService;
 import com.leslie.product.mapper.ProductMapper;
+import com.leslie.to.OrderToProduct;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author 20110
@@ -75,10 +79,10 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
     @Override
     public Result queryPage(Integer page, Integer size) {
         Page<Product> productPage = new Page<>(page, size);
-        productPage = productMapper.selectPage(productPage,null);
+        productPage = productMapper.selectPage(productPage, null);
         List<Product> productList = productPage.getRecords();
         long total = productPage.getTotal();
-        return Result.ok(productList,total);
+        return Result.ok(productList, total);
     }
 
     @Transactional
@@ -134,5 +138,55 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         //通知es更新数据
         rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_DELETE_KEY, id);
         return Result.ok();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void pubAddOrder(List<OrderToProduct> orderToProducts) {
+        //将集合转为map key:productId, value: orderToProduct
+        Map<Long, OrderToProduct> map = orderToProducts.stream().collect(
+                Collectors.toMap(OrderToProduct::getProductId, orderToProduct -> orderToProduct)
+        );
+
+        //获取商品id集合
+        Set<Long> productIds = map.keySet();
+
+        //查询商品id集合对应的商品信息
+        List<Product> productList = productMapper.selectBatchIds(productIds);
+
+        //修改商品信息
+        for (Product product : productList) {
+            Integer num = map.get(product.getProductId()).getNum();
+            //减库存
+            product.setProductStock(product.getProductStock() - num);
+            //加销量
+            product.setProductSales(product.getProductSales() + num);
+        }
+
+        //批量更新商品数据
+        boolean isUpdate = updateBatchById(productList);
+        if (!isUpdate) {
+            throw new RuntimeException("系统异常，商品信息更新失败！");
+        }
+
+        rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_UPDATE_KEY, productList);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void pubCancelOrder(OrderToProduct orderToProduct) {
+        Product product = productMapper.selectById(orderToProduct.getProductId());
+        Integer num = orderToProduct.getNum();
+        //加库存
+        product.setProductStock(product.getProductStock() + num);
+        //减销量
+        product.setProductSales(product.getProductSales() -num);
+
+        boolean update = updateById(product);
+        if (!update) {
+            throw new RuntimeException("系统异常，商品信息更新失败！");
+        }
+
+        rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_INSERT_KEY, product);
     }
 }

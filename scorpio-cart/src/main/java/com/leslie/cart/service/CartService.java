@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.utils.Result;
 import com.leslie.vo.CartSaveParam;
 
+import java.util.List;
+
 /**
  * @author 20110
  * @description 针对表【tb_cart(购物车表)】的数据库操作Service
@@ -44,4 +46,10 @@ public interface CartService extends IService<Cart> {
      * @return
      */
     Result delete(Long userId, Long productId);
+
+    /**
+     * 清空对应id购物车项
+     * @param cartIds 购物车id集合
+     */
+    void clearIds(List<Long> cartIds);
 }

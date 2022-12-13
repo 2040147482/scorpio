@@ -1,0 +1,8 @@
+server:
+  port: 10091
+spring:
+  application:
+    name: order-service
+  cloud:
+    nacos:
+      server-addr: localhost:8848

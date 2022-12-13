@@ -152,6 +152,21 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
         return Result.ok();
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void clearIds(List<Long> cartIds) {
+        List<Cart> carts = cartMapper.selectBatchIds(cartIds);
+        if (carts == null) {
+            log.warn("购物车早已清空该购物车项！");
+            return;
+        }
+
+        int row = cartMapper.deleteBatchIds(cartIds);
+        if (row == 0) {
+            log.warn("系统异常！清空对应id购物车项失败！");
+        }
+    }
+
 
 }
 

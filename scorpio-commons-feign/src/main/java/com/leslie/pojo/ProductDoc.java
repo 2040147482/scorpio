@@ -3,6 +3,8 @@ package com.leslie.pojo;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 /**
  * @author 20110
  * description: 用于保存es文档数据
@@ -14,7 +16,7 @@ public class ProductDoc {
     private Long productId;
     private String productName;
     private Long categoryId;
-    private Double price;
+    private BigDecimal price;
     private Integer productStatus;
     private Integer productStock;
     private Integer productSales;

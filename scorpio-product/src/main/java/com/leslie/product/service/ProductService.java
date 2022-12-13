@@ -2,6 +2,7 @@ package com.leslie.product.service;
 
 import com.leslie.pojo.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.leslie.to.OrderToProduct;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
 
@@ -77,4 +78,11 @@ public interface ProductService extends IService<Product> {
      */
     Result removeProduct(Long id);
 
+    /**
+     * 更新商品库存和销量
+     * @param orderToProducts 商品id，商品销量值
+     */
+    void pubAddOrder(List<OrderToProduct> orderToProducts);
+
+    void pubCancelOrder(OrderToProduct orderToProduct);
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.leslie.clients.ProductClient;
 import com.leslie.pojo.Product;
 import com.leslie.pojo.ProductDoc;
+import com.leslie.search.manager.SearchManager;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
@@ -19,6 +20,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 import static com.leslie.search.constants.SearchConstant.CREATE_INDEX;
@@ -58,17 +60,10 @@ public class ApplicationRunListener implements ApplicationRunner {
         client.deleteByQuery(deleteByQueryRequest, RequestOptions.DEFAULT);
 
         //3.批量插入数据
-        BulkRequest bulkRequest = new BulkRequest();
-        for (Product product : productList) {
-            ProductDoc productDoc = new ProductDoc(product);
-            bulkRequest.add(new IndexRequest("product")
-                    .id(productDoc.getProductId().toString())
-                    .source(JSON.toJSONString(productDoc), XContentType.JSON)
-            );
-        }
-        client.bulk(bulkRequest, RequestOptions.DEFAULT);
+        SearchManager.batchInsert(client, productList);
 
         log.info("成功完成es索引库数据初始化");
     }
+
 
 }
