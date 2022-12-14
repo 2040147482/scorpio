@@ -112,6 +112,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return Result.ok();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Result cancel(String orderId) {
 
@@ -120,6 +121,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         Order order = orderMapper.selectOne(queryWrapper);
         //将订单状态设置为已取消
         order.setOrderStatus(4);
+        orderMapper.update(order, queryWrapper);
 
         //准备数据
         OrderToProduct orderToProduct = new OrderToProduct();
