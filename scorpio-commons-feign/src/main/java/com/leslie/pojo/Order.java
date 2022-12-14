@@ -39,6 +39,11 @@ public class Order implements Serializable {
     private Long productId;
 
     /**
+     * 用户地址主键id
+     */
+    private Integer addressId;
+
+    /**
      * 商品数量
      */
     private Integer productNum;
@@ -62,6 +67,7 @@ public class Order implements Serializable {
      * 订单状态，0:待付款，1:待发货，2:待收货，3:待评价，4:已取消
      */
     private Integer orderStatus;
+
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

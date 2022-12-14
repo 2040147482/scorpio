@@ -55,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // TODO 5。发送验证码
         log.debug("发送短信验证码成功，验证码：{}", code);
 
-        return Result.ok();
+        return Result.ok(code);
     }
 
     @Override

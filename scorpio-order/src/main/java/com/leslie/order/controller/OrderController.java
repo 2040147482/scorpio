@@ -17,6 +17,23 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
+    /**
+     * 查询单个订单信息
+     * @param orderId 订单编号
+     */
+    @GetMapping("/one/{orderId}")
+    public Result one(@PathVariable("orderId") String orderId) {
+        return orderService.one(orderId);
+    }
+
+    /**
+     * 查询全部订单接口
+     */
+    @GetMapping("/list/{userId}")
+    public Result list(@PathVariable("userId") Long userId) {
+        return orderService.show(userId);
+    }
+
     @PostMapping("/addfromcart")
     public Result addFromCart(@RequestBody OrderFromCartParam orderFromCartParam) {
         return orderService.addFromCart(orderFromCartParam);

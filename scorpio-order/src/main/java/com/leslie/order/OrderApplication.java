@@ -1,8 +1,11 @@
 package com.leslie.order;
 
+import com.leslie.clients.AddressClient;
+import com.leslie.clients.ProductClient;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author 20110
@@ -10,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("com.leslie.order.mapper")
+@EnableFeignClients(clients = {ProductClient.class, AddressClient.class})
 public class OrderApplication {
     public static void main(String[] args) {
         SpringApplication.run(OrderApplication.class, args);

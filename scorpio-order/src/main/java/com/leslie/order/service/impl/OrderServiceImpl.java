@@ -2,26 +2,29 @@ package com.leslie.order.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leslie.clients.AddressClient;
+import com.leslie.clients.ProductClient;
 import com.leslie.constants.MqConstants;
 import com.leslie.order.utils.OrderIdBuilder;
+import com.leslie.pojo.Address;
 import com.leslie.pojo.Order;
 import com.leslie.order.service.OrderService;
 import com.leslie.order.mapper.OrderMapper;
+import com.leslie.pojo.Product;
 import com.leslie.to.OrderToProduct;
 import com.leslie.utils.Result;
-import com.leslie.vo.CartVo;
-import com.leslie.vo.OrderFromCartParam;
-import com.leslie.vo.OrderStatusParam;
+import com.leslie.vo.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,6 +49,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     @Resource
     private OrderIdBuilder orderIdBuilder;
 
+    @Resource
+    private ProductClient productClient;
+
+    @Resource
+    private AddressClient addressClient;
 
     /**
      * 从购物车生成订单，并保存订单数据业务
@@ -91,6 +99,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
             order.setProductNum(cartVo.getNum());
             BigDecimal totalPrice = cartVo.getPrice().multiply(new BigDecimal(cartVo.getNum()));
             order.setProductPrice(totalPrice);
+            order.setAddressId(orderFromCartParam.getAddressId());
             orderList.add(order);
 
             //并设置订单过期时间为半小时
@@ -150,6 +159,66 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         order.setOrderStatus(orderStatusParam.getOrderStatus());
         int row = orderMapper.update(order, queryWrapper);
         return row;
+    }
+
+    @Override
+    public Result one(String orderId) {
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("order_id", orderId);
+        Order order = orderMapper.selectOne(queryWrapper);
+
+        Address address = addressClient.queryByAddressId(order.getAddressId());
+        Product product = productClient.cartProductDetail(order.getProductId());
+
+        String addressStr = address.getLinkman() + "，" + address.getPhone() + "，" + address.getAddress();
+        log.warn(addressStr);
+        //结果封装
+        OrderVo orderVo = new OrderVo();
+        BeanUtils.copyProperties(order, orderVo);
+        orderVo.setProductName(product.getProductName());
+        orderVo.setProductImage(product.getImageUrl());
+        orderVo.setAddress(addressStr);
+        return Result.ok(orderVo);
+    }
+
+    /**
+     * @param userId 用户id
+     * @return
+     */
+    @Override
+    public Result show(Long userId) {
+
+        //查询用户对应的全部订单数据
+        QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", userId);
+        List<Order> orderList = orderMapper.selectList(queryWrapper);
+
+        Set<Long> productIds = new HashSet<>();
+        for (Order order : orderList) {
+            productIds.add(order.getProductId());
+        }
+
+        //商品数据
+        ProductIdsParam productIdsParam = new ProductIdsParam();
+        productIdsParam.setProductIds(new ArrayList<>(productIds));
+        List<Product> productList = productClient.ids(productIdsParam);
+
+        Map<Long, Product> productMap = productList.stream().
+                collect(Collectors.toMap(Product::getProductId, product -> product));
+
+        //返回Vo数据封装
+        List<OrderVo> result = new ArrayList<>();
+
+        for (Order order : orderList) {
+            Product product = productMap.get(order.getProductId());
+            OrderVo orderVo = new OrderVo();
+            BeanUtils.copyProperties(order, orderVo);
+            orderVo.setProductName(product.getProductName());
+            orderVo.setProductImage(product.getImageUrl());
+            result.add(orderVo);
+        }
+
+        return Result.ok(result, result.size());
     }
 
 }

@@ -12,5 +12,6 @@ import java.util.List;
 public class OrderFromCartParam {
 
     private Long userId;
+    private Integer addressId;
     private List<CartVo> products;
 }
