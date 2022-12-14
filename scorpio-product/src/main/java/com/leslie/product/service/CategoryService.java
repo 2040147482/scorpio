@@ -1,6 +1,6 @@
 package com.leslie.product.service;
 
-import com.leslie.product.pojo.Category;
+import com.leslie.pojo.Category;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.utils.Result;
 
@@ -24,4 +24,33 @@ public interface CategoryService extends IService<Category> {
      * @return Category类型数据
      */
     Category byName(String categoryName);
+
+    /**
+     * 分页查询类别
+     * @param curPage
+     * @param size
+     * @return
+     */
+    Result selectPage(Integer curPage, Integer size);
+
+    /**
+     * 添加类别
+     * @param category
+     * @return
+     */
+    Result add(Category category);
+
+    /**
+     * 修改类别信息
+     * @param category
+     * @return
+     */
+    Result update(Category category);
+
+    /**
+     * 删除类别
+     * @param categoryId 类别id
+     * @return
+     */
+    Result delete(Long categoryId);
 }

@@ -1,7 +1,6 @@
 package com.leslie.product.controller;
 
 import com.leslie.pojo.Product;
-import com.leslie.product.service.CategoryService;
 import com.leslie.product.service.ProductService;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
@@ -20,15 +19,8 @@ public class ProductController {
     @Resource
     private ProductService productService;
 
-    @Resource
-    private CategoryService categoryService;
 
-    @GetMapping("/category/all")
-    public Result allCategory() {
-        return categoryService.all();
-    }
-
-    @PostMapping("/promo")
+    @GetMapping("/promo")
     public Result promo(@RequestParam("categoryName") String categoryName) {
         if (categoryName.isEmpty()) {
             return Result.fail("空参无法查询");

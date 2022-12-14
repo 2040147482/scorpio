@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leslie.constants.MqConstants;
-import com.leslie.product.pojo.Category;
+import com.leslie.pojo.Category;
 import com.leslie.pojo.Product;
 import com.leslie.product.service.CategoryService;
 import com.leslie.product.service.ProductService;
@@ -46,7 +46,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
     public Result promo(String categoryName) {
         Category category = categoryService.byName(categoryName);
         Long cid = category.getCid();
-
+        String s = "✳xing'hao";
         //封装查询参数
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("category_id", cid);

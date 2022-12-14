@@ -1,5 +1,6 @@
 package com.leslie.clients;
 
+import com.leslie.pojo.Category;
 import com.leslie.pojo.Product;
 import com.leslie.utils.Result;
 import com.leslie.vo.ProductIdsParam;
@@ -50,6 +51,22 @@ public interface ProductClient {
 
     @DeleteMapping("/product/remove/{id}")
     Result deleteByProductId(@PathVariable("id") Long id);
+
+    @GetMapping("/product/category/{page}/{size}")
+    Result selectPage(@PathVariable("page") Integer page,
+                      @PathVariable("size") Integer size);
+
+    @PostMapping("/product/category/add")
+    Result add(@RequestBody Category category);
+
+    @PutMapping("/product/category/update")
+    Result update(@RequestBody Category category);
+
+    @DeleteMapping("/product/category/delete/{categoryId}")
+    Result delete(@PathVariable("categoryId") Long categoryId);
+
+    @GetMapping("/product/promo")
+    Result promo(@RequestParam("categoryName") String categoryName);
 
     /**
      * 以下为购物车服务调用的接口
