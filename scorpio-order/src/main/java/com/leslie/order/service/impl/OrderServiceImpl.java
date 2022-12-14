@@ -125,6 +125,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         OrderToProduct orderToProduct = new OrderToProduct();
         orderToProduct.setProductId(order.getProductId());
         orderToProduct.setNum(order.getProductNum());
+
+        redisTemplate.delete("orderId:" + orderId);
+
         //发送商品服务消息，通知恢复库存和销量
         try {
             rabbitTemplate.convertAndSend(MqConstants.ORDER_EXCHANGE, MqConstants.ORDER_UPDATE_KEY, orderToProduct);
