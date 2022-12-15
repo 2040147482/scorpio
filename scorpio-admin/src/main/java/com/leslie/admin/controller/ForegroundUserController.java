@@ -1,6 +1,6 @@
 package com.leslie.admin.controller;
 
-import com.leslie.clients.UserInfoClient;
+import com.leslie.clients.UserClient;
 import com.leslie.utils.Result;
 import com.leslie.vo.UserInfoParam;
 import org.springframework.web.bind.annotation.*;
@@ -15,21 +15,21 @@ import javax.annotation.Resource;
 public class ForegroundUserController {
 
     @Resource
-    private UserInfoClient userInfoClient;
+    private UserClient userClient;
 
     @GetMapping("/query/{page}/{size}")
     public Result queryPageForegroundUser(@PathVariable("page") Integer page,
                                           @PathVariable("size") Integer size) {
-        return userInfoClient.queryPage(page, size);
+        return userClient.queryPage(page, size);
     }
 
     @PutMapping("/update")
     public Result update(@RequestBody UserInfoParam userInfoParam) {
-        return userInfoClient.update(userInfoParam);
+        return userClient.update(userInfoParam);
     }
 
     @DeleteMapping("/delete/{uid}")
     public Result deleteById(@PathVariable("uid") Long uid) {
-        return userInfoClient.deleteById(uid);
+        return userClient.deleteById(uid);
     }
 }

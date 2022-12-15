@@ -3,8 +3,8 @@ package com.leslie.order.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.leslie.clients.AddressClient;
 import com.leslie.clients.ProductClient;
+import com.leslie.clients.UserClient;
 import com.leslie.constants.MqConstants;
 import com.leslie.order.utils.OrderIdBuilder;
 import com.leslie.pojo.Address;
@@ -54,7 +54,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
     private ProductClient productClient;
 
     @Resource
-    private AddressClient addressClient;
+    private UserClient userClient;
 
     /**
      * 从购物车生成订单，并保存订单数据业务
@@ -168,11 +168,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         queryWrapper.eq("order_id", orderId);
         Order order = orderMapper.selectOne(queryWrapper);
 
-        Address address = addressClient.queryByAddressId(order.getAddressId());
+        Address address = userClient.queryByAddressId(order.getAddressId());
         Product product = productClient.cartProductDetail(order.getProductId());
 
         String addressStr = address.getLinkman() + "，" + address.getPhone() + "，" + address.getAddress();
-        log.warn(addressStr);
+
         //结果封装
         OrderVo orderVo = new OrderVo();
         BeanUtils.copyProperties(order, orderVo);
@@ -240,7 +240,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         //地址数据
         AddressIdsParam addressIdsParam = new AddressIdsParam();
         addressIdsParam.setAddressIds(new ArrayList<>(addressIds));
-        List<Address> addressList = addressClient.ids(addressIdsParam);
+        List<Address> addressList = userClient.ids(addressIdsParam);
         Map<Integer, String> addressMap = addressList.stream().collect(Collectors.toMap(Address::getId, Address::getLinkman));
 
         //商品数据

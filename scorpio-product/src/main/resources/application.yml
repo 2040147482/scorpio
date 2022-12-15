@@ -7,8 +7,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
   profiles:
     active: mq  # 激活mq配置
-  jackson:
-    default-property-inclusion: non_null
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

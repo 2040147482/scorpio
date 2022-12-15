@@ -76,4 +76,14 @@ public interface ProductClient {
      */
     @GetMapping("/product/cart/{productId}")
     Product cartProductDetail(@PathVariable("productId") Long productId);
+
+    /**
+     * 以下为购物车服务调用的接口
+     *
+     * @param curPage 当前页
+     * @param size 页容量
+     * @return
+     */
+    @GetMapping("/product/score/{curPage}/{size}")
+    Result queryScorePage(@PathVariable("curPage") Integer curPage, @PathVariable("size") Integer size);
 }
