@@ -4,9 +4,11 @@ import com.leslie.member.service.AddressService;
 import com.leslie.member.vo.AddAddressVo;
 import com.leslie.pojo.Address;
 import com.leslie.utils.Result;
+import com.leslie.vo.AddressIdsParam;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author 20110
@@ -44,5 +46,10 @@ public class AddressController {
         return addressService.queryByAddressId(addressId);
     }
 
+    @PostMapping("/ids")
+    public List<Address> ids(@RequestBody AddressIdsParam addressIdsParam) {
+
+        return addressService.ids(addressIdsParam);
+    }
 
 }

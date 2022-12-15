@@ -4,6 +4,9 @@ import com.leslie.member.vo.AddAddressVo;
 import com.leslie.pojo.Address;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.utils.Result;
+import com.leslie.vo.AddressIdsParam;
+
+import java.util.List;
 
 /**
  * @author 20110
@@ -46,8 +49,17 @@ public interface AddressService extends IService<Address> {
 
     /**
      * 修改地址信息
+     *
      * @param address
      * @return
      */
     Result update(Address address);
+
+    /**
+     * 根据地址id查询Address集合
+     *
+     * @param addressIdsParam
+     * @return
+     */
+    List<Address> ids(AddressIdsParam addressIdsParam);
 }

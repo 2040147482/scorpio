@@ -1,6 +1,7 @@
 package com.leslie.order.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.leslie.clients.AddressClient;
 import com.leslie.clients.ProductClient;
@@ -219,6 +220,46 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         }
 
         return Result.ok(result, result.size());
+    }
+
+    @Override
+    public Result queryPage(Integer curPage, Integer size) {
+        //分页传
+        Page<Order> page = new Page<>(curPage, size);
+        page = orderMapper.selectPage(page, null);
+        List<Order> orderList = page.getRecords();
+
+        Set<Integer> addressIds = new HashSet<>();
+        Set<Long> productIds = new HashSet<>();
+
+        for (Order order : orderList) {
+            addressIds.add(order.getAddressId());
+            productIds.add(order.getProductId());
+        }
+
+        //地址数据
+        AddressIdsParam addressIdsParam = new AddressIdsParam();
+        addressIdsParam.setAddressIds(new ArrayList<>(addressIds));
+        List<Address> addressList = addressClient.ids(addressIdsParam);
+        Map<Integer, String> addressMap = addressList.stream().collect(Collectors.toMap(Address::getId, Address::getLinkman));
+
+        //商品数据
+        ProductIdsParam productIdsParam = new ProductIdsParam();
+        productIdsParam.setProductIds(new ArrayList<>(productIds));
+        List<Product> productList = productClient.ids(productIdsParam);
+        Map<Long, String> productMap = productList.stream().collect(Collectors.toMap(Product::getProductId, Product::getProductName));
+
+        //封装返回结果数据
+        List<AdminOrderVo> adminOrderVoList = new ArrayList<>();
+        for (Order order : orderList) {
+            AdminOrderVo adminOrderVo = new AdminOrderVo(order);
+            adminOrderVo.setBuyerName(addressMap.get(order.getAddressId()));
+            adminOrderVo.setProductName(productMap.get(order.getProductId()));
+            adminOrderVoList.add(adminOrderVo);
+        }
+
+        long total = page.getTotal();
+        return Result.ok(adminOrderVoList, total);
     }
 
 }

@@ -7,6 +7,7 @@ import com.leslie.pojo.Address;
 import com.leslie.member.service.AddressService;
 import com.leslie.member.mapper.AddressMapper;
 import com.leslie.utils.Result;
+import com.leslie.vo.AddressIdsParam;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +71,13 @@ public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
         return addressMapper.selectById(addressId);
     }
 
+
+    @Override
+    public List<Address> ids(AddressIdsParam addressIdsParam) {
+        List<Integer> addressIds = addressIdsParam.getAddressIds();
+        List<Address> addressList = addressMapper.selectBatchIds(addressIds);
+        return addressList;
+    }
 }
 
 

@@ -51,4 +51,15 @@ public interface OrderService extends IService<Order> {
      * @return
      */
     Result show(Long userId);
+
+
+    /**
+     * 订单分页查询
+     *
+     * @param curPage 当前页码
+     * @param size   页容量
+     * @return
+     */
+    Result queryPage(Integer curPage, Integer size);
+
 }

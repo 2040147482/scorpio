@@ -15,7 +15,7 @@ ribbon:
     clients:
       - product-service
       - member-service
-
+      - order-service
 
 feign:
   client:

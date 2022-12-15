@@ -19,6 +19,7 @@ public class OrderController {
 
     /**
      * 查询单个订单信息
+     *
      * @param orderId 订单编号
      */
     @GetMapping("/one/{orderId}")
@@ -42,6 +43,12 @@ public class OrderController {
     @DeleteMapping("/cancel/{orderId}")
     public Result cancel(@PathVariable("orderId") String orderId) {
         return orderService.cancel(orderId);
+    }
+
+    @GetMapping("/{curPage}/{size}")
+    public Result queryPage(@PathVariable("curPage") Integer curPage,
+                            @PathVariable("size") Integer size) {
+        return orderService.queryPage(curPage, size);
     }
 
 }
