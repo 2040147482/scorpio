@@ -2,9 +2,11 @@ package com.leslie.product.controller;
 
 import com.leslie.pojo.Product;
 import com.leslie.product.service.ProductService;
+import com.leslie.product.vo.UploadProductImgVo;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -73,6 +75,14 @@ public class ProductController {
     @DeleteMapping("/remove/{id}")
     public Result deleteByProductId(@PathVariable("id") Long id) {
         return productService.removeProduct(id);
+    }
+
+    @PostMapping("/upload/{productId}")
+    public Result uploadImg(@PathVariable("productId") Long productId, @RequestPart("file") MultipartFile file){
+        UploadProductImgVo imgVo = new UploadProductImgVo();
+        imgVo.setId(productId);
+        imgVo.setFile(file);
+        return productService.uploadImg(imgVo);
     }
 
     /**

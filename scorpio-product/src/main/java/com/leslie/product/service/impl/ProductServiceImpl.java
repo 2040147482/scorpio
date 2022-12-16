@@ -3,12 +3,14 @@ package com.leslie.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leslie.clients.FastdfsClient;
 import com.leslie.constants.MqConstants;
 import com.leslie.pojo.Category;
 import com.leslie.pojo.Product;
 import com.leslie.product.service.CategoryService;
 import com.leslie.product.service.ProductService;
 import com.leslie.product.mapper.ProductMapper;
+import com.leslie.product.vo.UploadProductImgVo;
 import com.leslie.to.OrderToProduct;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
@@ -41,6 +43,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
 
     @Resource
     private RabbitTemplate rabbitTemplate;
+
+    @Resource
+    private FastdfsClient fastdfsClient;
 
     @Override
     public Result promo(String categoryName) {
@@ -180,7 +185,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         //加库存
         product.setProductStock(product.getProductStock() + num);
         //减销量
-        product.setProductSales(product.getProductSales() -num);
+        product.setProductSales(product.getProductSales() - num);
 
         boolean update = updateById(product);
         if (!update) {
@@ -188,5 +193,21 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         }
 
         rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_INSERT_KEY, product);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Result uploadImg(UploadProductImgVo uploadImgVo) {
+        String res = fastdfsClient.uploadFile(uploadImgVo.getFile());
+        if ("不支持该类型文件".equals(res)) {
+            return Result.fail("目前只支持ico、jpg、jpeg、png后缀的图片！");
+        }
+        Product product = productMapper.selectById(uploadImgVo.getId());
+        product.setImageUrl(res);
+        int row = productMapper.updateById(product);
+        if ("文件上传失败".equals(res) || row == 0) {
+            return Result.fail("图片上传失败!");
+        }
+        return Result.ok("图片上传成功", res);
     }
 }

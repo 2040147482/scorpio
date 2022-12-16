@@ -3,9 +3,11 @@ package com.leslie.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leslie.clients.FastdfsClient;
 import com.leslie.pojo.Category;
 import com.leslie.product.service.CategoryService;
 import com.leslie.product.mapper.CategoryMapper;
+import com.leslie.product.vo.UploadCategoryIconVo;
 import com.leslie.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
 
     @Resource
     private CategoryMapper categoryMapper;
+
+    @Resource
+    private FastdfsClient fastdfsClient;
 
     @Override
     public Result all() {
@@ -79,5 +84,23 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
             return Result.fail("添加类别失败!");
         }
         return Result.ok();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Result uploadIcon(UploadCategoryIconVo uploadImgVo) {
+        String res = fastdfsClient.uploadFile(uploadImgVo.getFile());
+        if ("不支持该类型文件".equals(res)) {
+            return Result.fail("目前只支持ico、jpg、jpeg、png后缀的图片！");
+        }
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("category_name", uploadImgVo.getName());
+        Category category = categoryMapper.selectOne(queryWrapper);
+        category.setIcon(res);
+        int row = categoryMapper.updateById(category);
+        if ("文件上传失败".equals(res) || row == 0) {
+            return Result.fail("图标上传失败!");
+        }
+        return Result.ok("图标上传成功!", res);
     }
 }

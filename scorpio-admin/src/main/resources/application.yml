@@ -16,6 +16,7 @@ ribbon:
       - product-service
       - member-service
       - order-service
+      - fastdfs-service
 
 feign:
   client:

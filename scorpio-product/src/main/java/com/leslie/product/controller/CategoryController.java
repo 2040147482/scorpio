@@ -2,8 +2,10 @@ package com.leslie.product.controller;
 
 import com.leslie.pojo.Category;
 import com.leslie.product.service.CategoryService;
+import com.leslie.product.vo.UploadCategoryIconVo;
 import com.leslie.utils.Result;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -45,5 +47,12 @@ public class CategoryController {
         return categoryService.delete(categoryId);
     }
 
+    @PostMapping("/upload/{categoryName}")
+    public Result uploadIcon(@PathVariable("categoryName") String categoryName, @RequestPart("file") MultipartFile file){
+        UploadCategoryIconVo uploadImgVo = new UploadCategoryIconVo();
+        uploadImgVo.setName(categoryName);
+        uploadImgVo.setFile(file);
+        return categoryService.uploadIcon(uploadImgVo);
+    }
 
 }

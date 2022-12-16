@@ -4,7 +4,9 @@ import com.leslie.admin.service.UserService;
 import com.leslie.admin.vo.UpdateUserVo;
 import com.leslie.utils.Result;
 import com.leslie.admin.vo.LoginVo;
+import com.leslie.vo.UploadUserImgVo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -42,4 +44,14 @@ public class UserController {
     public Result deleleById(@PathVariable("uid") Integer uid) {
         return userService.deleteById(uid);
     }
+
+    @PostMapping("/upload/{userId}")
+    public Result uploadUserIcon(@PathVariable("userId") Long userId, @RequestPart("file") MultipartFile file) {
+        UploadUserImgVo imgVo = new UploadUserImgVo();
+        imgVo.setUserId(userId);
+        imgVo.setFile(file);
+        return userService.uploadUserIcon(imgVo);
+    }
+
+
 }

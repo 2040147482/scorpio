@@ -8,8 +8,10 @@ import com.leslie.admin.service.UserService;
 import com.leslie.admin.mapper.UserMapper;
 import com.leslie.admin.vo.LoginVo;
 import com.leslie.admin.vo.UpdateUserVo;
+import com.leslie.clients.FastdfsClient;
 import com.leslie.utils.MD5;
 import com.leslie.utils.Result;
+import com.leslie.vo.UploadUserImgVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +30,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private FastdfsClient fastdfsClient;
 
     @Override
     public Result login(LoginVo loginVo) {
@@ -77,6 +82,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             return Result.fail("用户数据删除失败！");
         }
         return Result.ok();
+    }
+
+    @Override
+    public Result uploadUserIcon(UploadUserImgVo imgVo) {
+        String res = fastdfsClient.uploadFile(imgVo.getFile());
+        if ("不支持该类型文件".equals(res)) {
+            return Result.fail("目前只支持ico、jpg、jpeg、png后缀的图片！");
+        }
+        User user = userMapper.selectById(imgVo.getUserId());
+        user.setIcon(res);
+        int row = userMapper.updateById(user);
+        if ("文件上传失败".equals(res) || row == 0) {
+            return Result.fail("图片上传失败!");
+        }
+        return Result.ok("图片上传成功", res);
     }
 }
 

@@ -2,6 +2,7 @@ package com.leslie.product.service;
 
 import com.leslie.pojo.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.leslie.product.vo.UploadProductImgVo;
 import com.leslie.to.OrderToProduct;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
@@ -85,4 +86,12 @@ public interface ProductService extends IService<Product> {
     void pubAddOrder(List<OrderToProduct> orderToProducts);
 
     void pubCancelOrder(OrderToProduct orderToProduct);
+
+    /**
+     * 上传商品图片
+     *
+     * @param uploadImgVo 商品id、商品图片
+     * @return
+     */
+    Result uploadImg(UploadProductImgVo uploadImgVo);
 }

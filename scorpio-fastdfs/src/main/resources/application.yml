@@ -1,0 +1,7 @@
+fdfs:
+  # socket连接超时时长
+  so-timeout: 1500
+  # 连接tracker服务器超时时长
+  connect-timeout: 600
+  # tracker调度追踪服务器的集合.可以配置集群
+  tracker-list: 192.168.174.100:22122

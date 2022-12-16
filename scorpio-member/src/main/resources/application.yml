@@ -13,3 +13,14 @@ spring:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+ribbon:
+  eager-load:
+    enabled: true
+    clients:
+      - fastdfs-service
+feign:
+  httpclient:
+    enabled: true
+    max-connections: 200
+    max-connections-per-route: 50

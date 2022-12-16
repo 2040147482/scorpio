@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.admin.vo.LoginVo;
 import com.leslie.admin.vo.UpdateUserVo;
 import com.leslie.utils.Result;
+import com.leslie.vo.UploadUserImgVo;
 
 /**
 * @author 20110
@@ -41,4 +42,11 @@ public interface UserService extends IService<User> {
      * @return
      */
     Result deleteById(Integer uid);
+
+    /**
+     * 上传用户头像
+     * @param imgVo 用户id、图片
+     * @return
+     */
+    Result uploadUserIcon(UploadUserImgVo imgVo);
 }

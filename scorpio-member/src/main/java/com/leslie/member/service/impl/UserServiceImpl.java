@@ -5,12 +5,14 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.leslie.clients.FastdfsClient;
 import com.leslie.member.dto.UserDTO;
 import com.leslie.member.pojo.User;
 import com.leslie.member.mapper.UserMapper;
 import com.leslie.member.service.UserService;
 import com.leslie.member.utils.RegexUtils;
 import com.leslie.member.vo.LoginWithCodeVo;
+import com.leslie.vo.UploadUserImgVo;
 import com.leslie.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -39,6 +41,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private UserMapper userMapper;
+
+    @Resource
+    private FastdfsClient fastdfsClient;
 
     @Override
     public Result sendCode(String phone) {
@@ -110,6 +118,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setNickName(USER_NICK_NAME_PREFIX + RandomUtil.randomString(10));
         save(user);
         return user;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public Result uploadHeadImg(UploadUserImgVo userImgVo) {
+        String res = fastdfsClient.uploadFile(userImgVo.getFile());
+        if ("不支持该类型文件".equals(res)) {
+            return Result.fail("目前只支持ico、jpg、jpeg、png后缀的图片！");
+        }
+        if ("文件上传失败".equals(res)) {
+            return Result.fail("文件上传失败");
+        }
+        Long userId = userImgVo.getUserId();
+        User user = userMapper.selectById(userId);
+        user.setIcon(res);
+        int row = userMapper.updateById(user);
+        if (row == 0) {
+            return Result.fail("文件上传失败");
+        }
+        return Result.ok("头像上传成功!", res);
     }
 }
 

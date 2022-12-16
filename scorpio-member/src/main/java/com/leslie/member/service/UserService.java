@@ -3,6 +3,7 @@ package com.leslie.member.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.leslie.member.pojo.User;
 import com.leslie.member.vo.LoginWithCodeVo;
+import com.leslie.vo.UploadUserImgVo;
 import com.leslie.utils.Result;
 
 
@@ -28,4 +29,12 @@ public interface UserService extends IService<User> {
      * @return 返回token
      */
     Result loginWithCode(LoginWithCodeVo loginForm);
+
+    /**
+     * 上传用户头像
+     *
+     * @param userImgVo 用户id、文件
+     * @return 文件路径
+     */
+    Result uploadHeadImg(UploadUserImgVo userImgVo);
 }
