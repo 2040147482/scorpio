@@ -5,6 +5,7 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SearchConfiguration {
 
+
+    @Value("${elasticsearch-server-url}")
+    public String elasticsearchServerUrl;
+
     /**
      * es客户端添加到ioc容器
      * @return RestHighLevelClient连接对象
@@ -21,7 +26,7 @@ public class SearchConfiguration {
     @Bean
     public RestHighLevelClient restHighLevelClient() {
         RestHighLevelClient client = new RestHighLevelClient(
-                RestClient.builder(HttpHost.create("http://192.168.174.100:9200")));
+                RestClient.builder(HttpHost.create(elasticsearchServerUrl)));
         return client;
     }
 

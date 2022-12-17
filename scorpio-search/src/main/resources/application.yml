@@ -13,3 +13,10 @@ feign:
     enabled: true  # 开启httpClient接池
     max-connections: 200  #最大连接数量
     max-connections-per-route: 50  #单路径最大连接数
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 6000
+
+elasticsearch-server-url: http://192.168.174.100:9200
