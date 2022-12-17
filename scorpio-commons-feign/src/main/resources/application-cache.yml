@@ -9,3 +9,14 @@ spring:
         max-idle: 10
         min-idle: 1
         time-between-eviction-runs: 10s
+  cache:
+    type: redis
+    redis:
+      # 指定缓存的数据的存活时间 毫秒为单位
+      time-to-live: 3600000
+      # 指定的前缀CACHE_
+      key-prefix: 'CACHE:'
+      # 允许使用前缀
+      use-key-prefix: true
+      # 是否缓存空值，防止缓存穿透
+      cache-null-values: true

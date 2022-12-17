@@ -9,6 +9,7 @@ import com.leslie.member.mapper.AddressMapper;
 import com.leslie.utils.Result;
 import com.leslie.vo.AddressIdsParam;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * @description 针对表【tb_address(地址表)】的数据库操作Service实现
  * @createDate 2022-12-14 15:39:32
  */
+@CacheConfig(cacheNames = "address")
 @Service
 public class AddressServiceImpl extends ServiceImpl<AddressMapper, Address>
         implements AddressService {

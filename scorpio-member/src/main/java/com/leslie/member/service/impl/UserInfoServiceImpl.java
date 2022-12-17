@@ -11,6 +11,10 @@ import com.leslie.member.mapper.UserInfoMapper;
 import com.leslie.utils.Result;
 import com.leslie.vo.UserInfoParam;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +26,7 @@ import java.util.List;
  * @description 针对表【tb_user_info(用户信息表)】的数据库操作Service实现
  * @createDate 2022-11-18 14:36:50
  */
+@CacheConfig(cacheNames = "user")
 @Service
 public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         implements UserInfoService {
@@ -32,6 +37,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
     @Resource
     private UserMapper userMapper;
 
+    @Cacheable(key = "'user:'+#page+':'+#size")
     @Override
     public Result queryPageUserInfo(Integer page, Integer size) {
         Page<UserInfo> userInfoPage = new Page<>(page, size);
@@ -43,6 +49,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         return Result.ok(userInfoList, total);
     }
 
+    @CacheEvict(value = "user", allEntries = true)
     @Transactional
     @Override
     public Result updateUserInfo(UserInfoParam userInfoParam) {
@@ -58,6 +65,7 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo>
         return Result.ok();
     }
 
+    @CacheEvict(value = "user", allEntries = true)
     @Transactional
     @Override
     public Result deleteById(Long uid) {
