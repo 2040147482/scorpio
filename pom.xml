@@ -37,6 +37,8 @@
         <mybatis-plus.vesion>3.5.1</mybatis-plus.vesion>
         <druid.version>1.2.11</druid.version>
         <elasticsearch.version>7.8.0</elasticsearch.version>
+        <feign-form.version>3.3.0</feign-form.version>
+        <feign-form-spring.version>3.3.0</feign-form-spring.version>
     </properties>
 
     <!--配置dependencyManagement锁定依赖的版本-->
@@ -74,6 +76,16 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign.form</groupId>
+                <artifactId>feign-form</artifactId>
+                <version>${feign-form.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.openfeign.form</groupId>
+                <artifactId>feign-form-spring</artifactId>
+                <version>${feign-form-spring.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
