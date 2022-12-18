@@ -13,6 +13,8 @@ import com.leslie.utils.MD5;
 import com.leslie.utils.Result;
 import com.leslie.vo.UploadUserImgVo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return Result.ok();
     }
 
+    @Cacheable(cacheNames = "admin", key = "'admin:user:'+#p0+#p1")
     @Override
     public Result queryPageUsers(Integer page, Integer size) {
         Page<User> userPage = new Page<>(page, size);
@@ -59,6 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return Result.ok(userList, total);
     }
 
+    @CacheEvict(cacheNames = "admin", allEntries = true)
     @Transactional
     @Override
     public Result updateUser(UpdateUserVo updateUserVo) {
@@ -72,6 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return Result.ok();
     }
 
+    @CacheEvict(cacheNames = "admin", allEntries = true)
     @Transactional
     @Override
     public Result deleteById(Integer uid) {
@@ -84,11 +89,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return Result.ok();
     }
 
+    @CacheEvict(cacheNames = "admin", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result uploadUserIcon(UploadUserImgVo imgVo) {
         User user = userMapper.selectById(imgVo.getUserId());
-        if (user == null){
+        if (user == null) {
             return Result.fail("用户不存在！");
         }
         String res = fastdfsClient.uploadFile(imgVo.getFile());

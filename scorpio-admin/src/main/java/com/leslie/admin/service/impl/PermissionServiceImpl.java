@@ -7,6 +7,7 @@ import com.leslie.admin.service.PermissionService;
 import com.leslie.admin.mapper.PermissionMapper;
 import com.leslie.admin.utils.PermissionHelper;
 import com.leslie.utils.Result;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Resource
     private PermissionMapper permissionMapper;
 
+    @Cacheable(cacheNames = "admin", key = "'admin:perms'")
     @Override
     public Result findAll() {
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();

@@ -6,6 +6,7 @@ import com.leslie.admin.pojo.Role;
 import com.leslie.admin.service.RoleService;
 import com.leslie.admin.mapper.RoleMapper;
 import com.leslie.utils.Result;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,6 +24,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
     @Resource
     private RoleMapper roleMapper;
 
+    @Cacheable(cacheNames = "admin", key = "'admin:role:'+#p0+#p1")
     @Override
     public Result selectPage(Integer curPage, Integer size) {
         Page<Role> rolePage = new Page<>(curPage, size);
