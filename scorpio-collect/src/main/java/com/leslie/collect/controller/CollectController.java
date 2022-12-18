@@ -22,7 +22,7 @@ public class CollectController {
         return collectService.saveCollect(collectParams);
     }
 
-    @PostMapping("/show/{userId}")
+    @GetMapping("/show/{userId}")
     public Result showCollect(@PathVariable("userId") Long userId) {
         return collectService.show(userId);
     }

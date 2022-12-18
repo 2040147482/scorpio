@@ -5,6 +5,8 @@ spring:
     username: root
     password: leslie
     type: com.alibaba.druid.pool.DruidDataSource
+  profiles:
+    active: cache
   jackson:
     default-property-inclusion: non_null
 mybatis-plus:

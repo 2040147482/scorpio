@@ -10,6 +10,9 @@ import com.leslie.pojo.Collect;
 import com.leslie.pojo.Product;
 import com.leslie.utils.Result;
 import com.leslie.vo.ProductIdsParam;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,7 @@ import java.util.List;
  * @description 针对表【tb_collect(收藏表)】的数据库操作Service实现
  * @createDate 2022-11-12 21:17:07
  */
+@CacheConfig(cacheNames = "collect")
 @Service
 public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> implements CollectService {
 
@@ -32,6 +36,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
     @Resource
     private ProductClient productClient;
 
+    @CacheEvict(key = "'collect:'+#collectParams.userId")
     @Transactional
     @Override
     public Result saveCollect(CollectParams collectParams) {
@@ -42,6 +47,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
         return Result.ok();
     }
 
+    @Cacheable(key = "'collect:'+#userId")
     @Override
     public Result show(Long userId) {
         //查询商品id
@@ -64,6 +70,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
         return Result.ok(products, total);
     }
 
+    @CacheEvict(key = "'collect:'+#collectParams.userId")
     @Transactional
     @Override
     public Result removeCollect(CollectParams collectParams) {
