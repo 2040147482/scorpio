@@ -17,6 +17,9 @@ import com.leslie.utils.Result;
 import com.leslie.vo.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,7 @@ import java.util.stream.Collectors;
  * @description 针对表【tb_order(订单表)】的数据库操作Service实现
  * @createDate 2022-12-12 22:52:06
  */
+@CacheConfig(cacheNames = "order")
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         implements OrderService {
@@ -66,6 +70,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
      * @param orderFromCartParam
      * @return
      */
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result addFromCart(OrderFromCartParam orderFromCartParam) {
@@ -122,6 +127,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return Result.ok();
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result cancel(String orderId) {
@@ -151,6 +157,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
 
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public int updateOrderStatus(OrderStatusParam orderStatusParam) {
@@ -162,6 +169,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return row;
     }
 
+    @Cacheable(key = "'order:detail:'+#orderId")
     @Override
     public Result one(String orderId) {
         QueryWrapper<Order> queryWrapper = new QueryWrapper<>();
@@ -186,6 +194,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
      * @param userId 用户id
      * @return
      */
+    @Cacheable(key = "'order:all:'+#userId")
     @Override
     public Result show(Long userId) {
 
@@ -222,6 +231,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order>
         return Result.ok(result, result.size());
     }
 
+    @Cacheable(key = "'order:'+#root.methodName+':'+#p0+#p1")
     @Override
     public Result queryPage(Integer curPage, Integer size) {
         //分页传
