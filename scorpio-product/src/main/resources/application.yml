@@ -6,7 +6,7 @@ spring:
     password: leslie
     type: com.alibaba.druid.pool.DruidDataSource
   profiles:
-    active: mq  # 激活mq配置
+    active: mq,cache  # 激活mq配置
 
 mybatis-plus:
   configuration:

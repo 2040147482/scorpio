@@ -16,6 +16,9 @@ import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,7 @@ import java.util.stream.Collectors;
  * @description 针对表【tb_product(商品表)】的数据库操作Service实现
  * @createDate 2022-11-11 19:51:56
  */
+@CacheConfig(cacheNames = "product")
 @Slf4j
 @Service
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
@@ -47,11 +51,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
     @Resource
     private FastdfsClient fastdfsClient;
 
+    @Cacheable(key = "'product:'+#p0")
     @Override
     public Result promo(String categoryName) {
         Category category = categoryService.byName(categoryName);
         Long cid = category.getCid();
-        String s = "✳xing'hao";
         //封装查询参数
         QueryWrapper<Product> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("category_id", cid);
@@ -65,13 +69,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok(productList, total);
     }
 
-
+    @Cacheable(key = "'product:'+#p0")
     @Override
     public Result detail(Long productId) {
         Product product = productMapper.selectById(productId);
         return Result.ok(product);
     }
 
+    @Cacheable(key = "'product:'+#root.methodName")
     @Override
     public List<Product> ids(ProductIdsParam productIdsParam) {
         List<Long> productIds = productIdsParam.getProductIds();
@@ -81,6 +86,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return list;
     }
 
+    @Cacheable(key = "'product:'+#p0+':'+#p1")
     @Override
     public Result queryPage(Integer page, Integer size) {
         Page<Product> productPage = new Page<>(page, size);
@@ -90,6 +96,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok(productList, total);
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional
     @Override
     public Result saveProduct(Product product) {
@@ -110,6 +117,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok();
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional
     @Override
     public Result updateProduct(Product product) {
@@ -130,6 +138,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok();
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional
     @Override
     public Result removeProduct(Long id) {
@@ -145,6 +154,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok();
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void pubAddOrder(List<OrderToProduct> orderToProducts) {
@@ -177,6 +187,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_UPDATE_KEY, productList);
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void pubCancelOrder(OrderToProduct orderToProduct) {
@@ -195,14 +206,18 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         rabbitTemplate.convertAndSend(MqConstants.PRODUCT_EXCHANGE, MqConstants.PRODUCT_INSERT_KEY, product);
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public Result uploadImg(UploadProductImgVo uploadImgVo) {
+        Product product = productMapper.selectById(uploadImgVo.getId());
+        if (product == null) {
+            return Result.fail("不存在该商品id!");
+        }
         String res = fastdfsClient.uploadFile(uploadImgVo.getFile());
         if ("不支持该类型文件".equals(res)) {
             return Result.fail("目前只支持ico、jpg、jpeg、png后缀的图片！");
         }
-        Product product = productMapper.selectById(uploadImgVo.getId());
         product.setImageUrl(res);
         int row = productMapper.updateById(product);
         if ("文件上传失败".equals(res) || row == 0) {

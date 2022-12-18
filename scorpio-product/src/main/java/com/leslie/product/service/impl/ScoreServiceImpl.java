@@ -7,6 +7,7 @@ import com.leslie.pojo.Score;
 import com.leslie.product.service.ScoreService;
 import com.leslie.product.mapper.ScoreMapper;
 import com.leslie.utils.Result;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
     @Resource
     private ScoreMapper scoreMapper;
 
+    @Cacheable(cacheNames = "score", key = "'score:'+#root.methodName+#p0+#p1")
     @Override
     public Result queryByUserIdAndProductId(Long userId, Long productId) {
         QueryWrapper<Score> queryWrapper = new QueryWrapper<>();
@@ -33,6 +35,7 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
         return Result.ok(score);
     }
 
+    @Cacheable(cacheNames = "score", key = "'score:'+#root.methodName+#p0+#p1")
     @Override
     public Result queryPage(Integer curPage, Integer size) {
         Page<Score> page = new Page<>(curPage, size);
