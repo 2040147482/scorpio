@@ -84,13 +84,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return Result.ok();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Result uploadUserIcon(UploadUserImgVo imgVo) {
+        User user = userMapper.selectById(imgVo.getUserId());
+        if (user == null){
+            return Result.fail("用户不存在！");
+        }
         String res = fastdfsClient.uploadFile(imgVo.getFile());
         if ("不支持该类型文件".equals(res)) {
             return Result.fail("目前只支持ico、jpg、jpeg、png后缀的图片！");
         }
-        User user = userMapper.selectById(imgVo.getUserId());
         user.setIcon(res);
         int row = userMapper.updateById(user);
         if ("文件上传失败".equals(res) || row == 0) {
