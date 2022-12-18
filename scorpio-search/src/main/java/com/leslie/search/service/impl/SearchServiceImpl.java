@@ -5,6 +5,7 @@ import com.leslie.pojo.Product;
 import com.leslie.search.service.SearchService;
 import com.leslie.search.vo.SearchParams;
 import com.leslie.utils.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -12,6 +13,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -23,12 +25,14 @@ import java.util.List;
 /**
  * @author 20110
  */
+@Slf4j
 @Service
 public class SearchServiceImpl implements SearchService {
 
     @Resource
     private RestHighLevelClient client;
 
+    @Cacheable(cacheNames = "search", key = "'search:'+#searchParams.search")
     @Override
     public Result search(SearchParams searchParams) {
 
@@ -68,7 +72,7 @@ public class SearchServiceImpl implements SearchService {
             Product product = JSON.parseObject(json, Product.class);
             productList.add(product);
         }
-
+        log.info("查询：{} 商品", search);
         return Result.ok(productList, total);
     }
 }

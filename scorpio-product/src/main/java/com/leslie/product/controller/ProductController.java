@@ -5,6 +5,7 @@ import com.leslie.product.service.ProductService;
 import com.leslie.product.vo.UploadProductImgVo;
 import com.leslie.vo.ProductIdsParam;
 import com.leslie.utils.Result;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,6 +44,7 @@ public class ProductController {
      *
      * @return 全部商品
      */
+    @Cacheable(cacheNames = "product", key = "'product:'+#root.methodName")
     @GetMapping("/list")
     public List<Product> list() {
         return productService.list();
