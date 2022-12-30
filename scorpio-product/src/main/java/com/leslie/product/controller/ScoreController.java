@@ -1,11 +1,9 @@
 package com.leslie.product.controller;
 
+import com.leslie.pojo.Score;
 import com.leslie.product.service.ScoreService;
 import com.leslie.utils.Result;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -31,4 +29,21 @@ public class ScoreController {
                             @PathVariable("size") Integer size) {
         return scoreService.queryPage(curPage, size);
     }
+
+    @PostMapping("/add")
+    public Result add(@RequestBody Score score){
+        return scoreService.add(score);
+    }
+
+    @PutMapping("/update")
+    public Result update(@RequestBody Score score){
+        return scoreService.update(score);
+    }
+
+    @DeleteMapping("/delete/{scoreId}")
+    public Result delete(@PathVariable("scoreId") Long scoreId){
+        return scoreService.delete(scoreId);
+    }
+
+
 }

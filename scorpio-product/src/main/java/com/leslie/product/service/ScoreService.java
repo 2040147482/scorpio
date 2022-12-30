@@ -28,4 +28,19 @@ public interface ScoreService extends IService<Score> {
      * @return
      */
     Result queryPage(Integer curPage, Integer size);
+
+    /**
+     * 添加评分
+     */
+    Result add(Score score);
+
+    /**
+     * 更新评分
+     */
+    Result update(Score score);
+
+    /**
+     * 删除评分
+     */
+    Result delete(Long scoreId);
 }

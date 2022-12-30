@@ -2,6 +2,7 @@ package com.leslie.clients;
 
 import com.leslie.pojo.Category;
 import com.leslie.pojo.Product;
+import com.leslie.pojo.Score;
 import com.leslie.utils.Result;
 import com.leslie.vo.ProductIdsParam;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -86,4 +87,15 @@ public interface ProductClient {
      */
     @GetMapping("/product/score/{curPage}/{size}")
     Result queryScorePage(@PathVariable("curPage") Integer curPage, @PathVariable("size") Integer size);
+
+    @PostMapping("/product/score/add")
+    Result add(@RequestBody Score score);
+
+    @PutMapping("/product/score/update")
+    Result update(@RequestBody Score score);
+
+    @DeleteMapping("/product/score/delete/{scoreId}")
+    Result deleteByScoreId(@PathVariable("scoreId") Long scoreId);
+
+
 }
