@@ -48,7 +48,8 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
         long total = page.getTotal();
         return Result.ok(scoreList, total);
     }
-
+    @CacheEvict(cacheNames = "score", allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Result add(Score score){
         QueryWrapper<Score> AddWrapper = new QueryWrapper<>();
@@ -64,7 +65,8 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
         }
          return Result.ok();
     }
-
+    @CacheEvict(cacheNames = "score", allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Result update(Score score){
 
@@ -79,7 +81,8 @@ public class ScoreServiceImpl extends ServiceImpl<ScoreMapper, Score>
         }
         return Result.ok();
     }
-
+    @CacheEvict(cacheNames = "score", allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Result delete(Long scoreId){
         int row = scoreMapper.deleteById(scoreId);
