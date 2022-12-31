@@ -76,7 +76,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product>
         return Result.ok(product);
     }
 
-    @Cacheable(key = "'product:'+#root.methodName")
+    @Cacheable(key = "'product:'+#productIdsParam.productIds")
     @Override
     public List<Product> ids(ProductIdsParam productIdsParam) {
         List<Long> productIds = productIdsParam.getProductIds();

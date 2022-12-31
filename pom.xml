@@ -18,6 +18,7 @@
         <module>scorpio-cart</module>
         <module>scorpio-order</module>
         <module>scorpio-fastdfs</module>
+        <module>scorpio-recommender</module>
     </modules>
     <packaging>pom</packaging>
 

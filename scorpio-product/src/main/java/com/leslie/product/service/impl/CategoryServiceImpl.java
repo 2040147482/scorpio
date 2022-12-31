@@ -79,7 +79,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
     public Result update(Category category) {
         int row = categoryMapper.updateById(category);
         if (row == 0) {
-            return Result.fail("添加类别失败!");
+            return Result.fail("更新类别失败!");
         }
         return Result.ok();
     }
@@ -90,7 +90,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
     public Result delete(Long categoryId) {
         int row = categoryMapper.deleteById(categoryId);
         if (row == 0) {
-            return Result.fail("添加类别失败!");
+            return Result.fail("删除类别失败!");
         }
         return Result.ok();
     }
